@@ -1,0 +1,12 @@
+root = "$ROOT/"
+skynetroot = "$SKYNETROOT/"
+thread = 8
+logpath = root .. "run"
+harbor = 0
+start = "main"	-- main script
+luaservice = root .. "src/?.lua;" .. skynetroot .."service/?.lua;" .. root .. "src/Agent/?.lua;" .. root .. "src/Core/?.lua;"
+lualoader = skynetroot .. "lualib/loader.lua"
+lua_path = skynetroot .. "lualib/?.lua;" .. skynetroot .. "lualib/?/init.lua;"..root .."src/?.lua;" .. root .. "src/Core/?.lua"
+lua_cpath = skynetroot .. "luaclib/?.so"
+cpath = skynetroot.."cservice/?.so"
+preload = "Preload"
