@@ -1,7 +1,9 @@
 local skynet = require "skynet"
 
 skynet.start(function()
-    print("hello world")
-    local agentSrv = skynet.newservice("AgentSrv")
-    local GateSrv = skynet.newservice("GateSrv")
+    skynet.newservice("debug_console",8000)
+
+    local hub = skynet.uniqueservice "HubSrv"
+	skynet.call(hub, "lua", "open", "0.0.0.0", 5678)
+	skynet.exit()
 end)
