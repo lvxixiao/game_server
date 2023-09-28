@@ -1,6 +1,8 @@
 local skynet = require "skynet"
-local socket = require "skynet.socket"
+local ProxySocket = require "Common.ProxySocket"
+local socketdriver = require "skynet.socketdriver"
 local hub = {}
+local handler = {}
 local AuthSrv
 local ipConf = {
     ip = "0.0.0.0",
@@ -9,22 +11,30 @@ local ipConf = {
 
 -- todo: zf 换成 snax
 
--- 参考 https://blog.codingnow.com/2016/06/skynet_sample.html
-
-local function newClient(fd, addr)
-    skynet.error("hub new cliend, fd =", fd, "addr =", table.dump(addr))
+function handler.connect(fd, addr)
+    skynet.sleep(200)
     skynet.send(AuthSrv, "lua", "ConnectFromHub", fd, addr)
+    print("客户端连接", fd, addr)
 end
 
+function handler.disconnect(fd)
+    print("客户端断开连接", fd)
+    socketdriver.close(fd)
+end
+
+function handler.error(fd)
+    print("连接异常", fd)
+    socketdriver.close(fd)
+end
+
+-- 参考 https://blog.codingnow.com/2016/06/skynet_sample.html
+
 function hub.open()
-    local ip = ipConf.ip
-    local port = ipConf.port
-    skynet.error(string.format("hub listen ip:%s, oprt:%s", ip, port))
-    local fd = socket.listen(ip, port)
-    socket.start(fd, newClient)
+    ProxySocket.Open(ipConf)
 end
 
 skynet.start(function() 
+    ProxySocket.Init(handler)
     AuthSrv = skynet.newservice("AuthSrv")
 
     skynet.dispatch("lua", function (_,_, cmd, ...)

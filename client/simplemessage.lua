@@ -29,6 +29,10 @@ function message.connect()
 	socket.isconnect()
 end
 
+function message.close()
+	socket.close()
+end
+
 function message.bind(obj, handler)
 	var.object[obj] = handler
 end

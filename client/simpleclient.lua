@@ -61,6 +61,5 @@ end
 
 -- message.request("signin", { userid = "alice" })
 
--- while true do
--- 	message.update()
--- end
+message.close()
+print("关闭连接")
